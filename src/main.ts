@@ -1,5 +1,6 @@
-import { KaboomCtx } from "kaboom";
+import { GameObj, KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
+import { drawTiles, fetchMapData } from "./utils";
 
 k.loadSprite(
   "background-layer-1",
@@ -16,9 +17,52 @@ k.loadSprite("tileset", "./assets/oak_woods_tileset.png", {
   sliceY: 22,
 });
 
-function arena(k: KaboomCtx) {
+async function arena(k: KaboomCtx) {
   k.add([k.sprite("background-layer-1"), k.pos(0, 0), k.scale(4), k.fixed()]);
   k.add([k.sprite("background-layer-2"), k.pos(0, 0), k.scale(4), k.fixed()]);
+
+  const { layers, tilewidth, tileheight } = await fetchMapData(
+    "./maps/arena.json"
+  );
+
+  const map = k.add([k.pos(0, -400)]);
+
+  const entities: { player1: GameObj | null; player2: GameObj | null } = {
+    player1: null,
+    player2: null,
+  };
+
+  for (const layer of layers) {
+    if (layer.name === "SpawnPoints") {
+      for (const object of layer.objects) {
+        if (object.name === "player-1") {
+          entities.player1 = map.add([
+            k.rect(16, 32),
+            k.area(),
+            k.outline(3),
+            k.pos(object.x, object.y),
+          ]);
+          continue;
+        }
+
+        if (object.name === "player-2") {
+          entities.player2 = map.add([
+            k.rect(16, 32),
+            k.area(),
+            k.outline(3),
+            k.pos(object.x, object.y),
+          ]);
+          continue;
+        }
+      }
+
+      continue;
+    }
+
+    drawTiles(k, map, layer, tilewidth, tileheight);
+  }
+
+  map.use(k.scale(4));
 }
 
 k.scene("arena", () => arena(k));

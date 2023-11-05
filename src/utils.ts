@@ -1,16 +1,24 @@
 import { KaboomCtx, GameObj } from "kaboom";
+import { TiledLayer } from "./types";
 
 export async function fetchMapData(mapFilePath: string) {
-  return await (await fetch(mapFilePath)).json();
+  const response = await fetch(mapFilePath);
+  if (response.status === 404) {
+    throw new Error(response.statusText);
+  }
+
+  return await response.json();
 }
 
 export function drawTiles(
   k: KaboomCtx,
   map: GameObj,
-  layer,
-  tileheight,
-  tilewidth
+  layer: TiledLayer,
+  tilewidth: number,
+  tileheight: number
 ) {
+  if (!layer.data) return;
+
   let nbOfDrawnTiles = 0;
   const tilePos = k.vec2(0, 0);
   for (const tile of layer.data) {
