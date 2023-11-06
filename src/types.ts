@@ -1,3 +1,5 @@
+import { GameObj } from "kaboom";
+
 export type TiledLayer = {
   id: number;
   name: string;
@@ -23,4 +25,8 @@ export type TiledObject = {
   width: number;
   x: number;
   y: number;
+};
+
+export type Entity = {
+  gameObj: GameObj;
 };

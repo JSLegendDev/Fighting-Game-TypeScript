@@ -1,6 +1,8 @@
 import { GameObj, KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
+import { makeSamurai } from "./entities/samurai";
+import { Entity } from "./types";
 
 k.loadSprite(
   "background-layer-1",
@@ -17,6 +19,18 @@ k.loadSprite("tileset", "./assets/oak_woods_tileset.png", {
   sliceY: 22,
 });
 
+k.loadSprite("idle-samurai", "./assets/idle-player1.png", {
+  sliceX: 8,
+  sliceY: 1,
+  anims: {
+    idle: {
+      from: 0,
+      to: 7,
+      loop: true,
+    },
+  },
+});
+
 async function arena(k: KaboomCtx) {
   k.add([k.sprite("background-layer-1"), k.pos(0, 0), k.scale(4), k.fixed()]);
   k.add([k.sprite("background-layer-2"), k.pos(0, 0), k.scale(4), k.fixed()]);
@@ -27,7 +41,7 @@ async function arena(k: KaboomCtx) {
 
   const map = k.add([k.pos(0, -400)]);
 
-  const entities: { player1: GameObj | null; player2: GameObj | null } = {
+  const entities: { player1: Entity | null; player2: GameObj | null } = {
     player1: null,
     player2: null,
   };
@@ -36,12 +50,7 @@ async function arena(k: KaboomCtx) {
     if (layer.name === "SpawnPoints") {
       for (const object of layer.objects) {
         if (object.name === "player-1") {
-          entities.player1 = map.add([
-            k.rect(16, 32),
-            k.area(),
-            k.outline(3),
-            k.pos(object.x, object.y),
-          ]);
+          entities.player1 = makeSamurai(k, map, k.vec2(object.x, object.y));
           continue;
         }
 
