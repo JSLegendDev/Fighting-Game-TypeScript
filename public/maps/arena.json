@@ -65,6 +65,28 @@
         }, 
         {
          "draworder":"topdown",
+         "id":3,
+         "name":"Boundaries",
+         "objects":[
+                {
+                 "height":32,
+                 "id":5,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":576,
+                 "x":0,
+                 "y":240
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":2,
          "name":"SpawnPoints",
          "objects":[
@@ -78,7 +100,7 @@
                  "visible":true,
                  "width":0,
                  "x":48,
-                 "y":208
+                 "y":192
                 }, 
                 {
                  "height":0,
@@ -91,18 +113,6 @@
                  "width":0,
                  "x":176,
                  "y":208
-                }, 
-                {
-                 "height":0,
-                 "id":3,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":-48,
-                 "y":144
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -110,8 +120,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":3,
- "nextobjectid":5,
+ "nextlayerid":4,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

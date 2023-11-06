@@ -19,7 +19,7 @@ k.loadSprite("tileset", "./assets/oak_woods_tileset.png", {
   sliceY: 22,
 });
 
-k.loadSprite("idle-samurai", "./assets/idle-player1.png", {
+k.loadSprite("idle-samurai", "./assets/entities/idle-player1.png", {
   sliceX: 8,
   sliceY: 1,
   anims: {
@@ -32,6 +32,8 @@ k.loadSprite("idle-samurai", "./assets/idle-player1.png", {
 });
 
 async function arena(k: KaboomCtx) {
+  k.setGravity(800);
+
   k.add([k.sprite("background-layer-1"), k.pos(0, 0), k.scale(4), k.fixed()]);
   k.add([k.sprite("background-layer-2"), k.pos(0, 0), k.scale(4), k.fixed()]);
 
@@ -47,6 +49,18 @@ async function arena(k: KaboomCtx) {
   };
 
   for (const layer of layers) {
+    if (layer.name === "Boundaries") {
+      for (const object of layer.objects) {
+        map.add([
+          k.area({
+            shape: new k.Rect(k.vec2(0), object.width, object.height),
+          }),
+          k.pos(object.x, object.y + tileheight),
+          k.body({ isStatic: true }),
+        ]);
+      }
+    }
+
     if (layer.name === "SpawnPoints") {
       for (const object of layer.objects) {
         if (object.name === "player-1") {
@@ -60,6 +74,7 @@ async function arena(k: KaboomCtx) {
             k.area(),
             k.outline(3),
             k.pos(object.x, object.y),
+            k.body(),
           ]);
           continue;
         }
