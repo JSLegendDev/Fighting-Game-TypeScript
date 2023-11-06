@@ -41,7 +41,7 @@ async function arena(k: KaboomCtx) {
     "./maps/arena.json"
   );
 
-  const map = k.add([k.pos(0, -400)]);
+  const map = k.add([k.pos(0, 0)]);
 
   const entities: { player1: Entity | null; player2: GameObj | null } = {
     player1: null,
@@ -86,7 +86,10 @@ async function arena(k: KaboomCtx) {
     drawTiles(k, map, layer, tilewidth, tileheight);
   }
 
-  map.use(k.scale(4));
+  map.use(k.scale(1));
+
+  k.camPos(k.vec2(k.center().x - 480, k.center().y - 170));
+  k.camScale(k.vec2(4));
 }
 
 k.scene("arena", () => arena(k));
