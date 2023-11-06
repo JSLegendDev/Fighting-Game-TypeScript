@@ -86,8 +86,6 @@ async function arena(k: KaboomCtx) {
     drawTiles(k, map, layer, tilewidth, tileheight);
   }
 
-  map.use(k.scale(1));
-
   k.camPos(k.vec2(k.center().x - 480, k.center().y - 170));
   k.camScale(k.vec2(4));
 

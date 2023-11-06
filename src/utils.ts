@@ -17,6 +17,8 @@ export function drawTiles(
   tilewidth: number,
   tileheight: number
 ) {
+  if (!layer.data) return;
+
   let nbOfDrawnTiles = 0;
   const tilePos = k.vec2(0, 0);
   for (const tile of layer.data) {
