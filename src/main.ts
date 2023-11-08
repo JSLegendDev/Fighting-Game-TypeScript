@@ -3,6 +3,7 @@ import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
 import { makeSamurai } from "./entities/samurai";
 import { TiledLayer, Entity } from "./types";
+import { makeNinja } from "./entities/ninja";
 
 k.loadSprite(
   "background-layer-1",
@@ -21,22 +22,34 @@ k.loadSprite("tileset", "./assets/oak_woods_tileset.png", {
 
 k.loadSprite("samurai", "./assets/entities/samurai.png", {
   sliceX: 8,
-  sliceY: 6,
+  sliceY: 9,
   anims: {
     idle: {
-      from: 24,
-      to: 31,
-      loop: true,
-    },
-    run: {
       from: 32,
       to: 39,
       loop: true,
     },
+    run: {
+      from: 48,
+      to: 55,
+      loop: true,
+    },
     attack: {
       from: 0,
-      to: 7,
+      to: 5,
       speed: 16,
+    },
+  },
+});
+
+k.loadSprite("ninja", "./assets/entities/ninja.png", {
+  sliceX: 8,
+  sliceY: 8,
+  anims: {
+    idle: {
+      from: 32,
+      to: 35,
+      loop: true,
     },
   },
 });
@@ -53,14 +66,13 @@ async function arena(k: KaboomCtx) {
 
   const map = k.add([k.pos(0, 0)]);
 
-  const entities: { player1: Entity | null; player2: GameObj | null } = {
+  const entities: { player1: Entity | null; player2: Entity | null } = {
     player1: null,
     player2: null,
   };
 
   let layer: TiledLayer;
   for (layer of layers) {
-    console.log(layer.type);
     if (layer.name === "Boundaries" && layer.type === "objectgroup") {
       for (const object of layer.objects) {
         map.add([
@@ -81,13 +93,7 @@ async function arena(k: KaboomCtx) {
         }
 
         if (object.name === "player-2") {
-          entities.player2 = map.add([
-            k.rect(16, 32),
-            k.area(),
-            k.outline(3),
-            k.pos(object.x, object.y),
-            k.body(),
-          ]);
+          entities.player2 = makeNinja(k, map, k.vec2(object.x, object.y));
           continue;
         }
       }
@@ -100,7 +106,7 @@ async function arena(k: KaboomCtx) {
     }
   }
 
-  k.camPos(k.vec2(k.center().x - 480, k.center().y - 150));
+  k.camPos(k.vec2(k.center().x - 480, k.center().y - 160));
   k.camScale(k.vec2(4));
 
   entities.player1?.setControls();
