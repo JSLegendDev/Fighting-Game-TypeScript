@@ -19,11 +19,21 @@ k.loadSprite("tileset", "./assets/oak_woods_tileset.png", {
   sliceY: 22,
 });
 
-k.loadSprite("idle-samurai", "./assets/entities/idle-player1.png", {
+k.loadSprite("samurai", "./assets/entities/samurai.png", {
   sliceX: 8,
-  sliceY: 1,
+  sliceY: 6,
   anims: {
     idle: {
+      from: 24,
+      to: 31,
+      loop: true,
+    },
+    run: {
+      from: 32,
+      to: 39,
+      loop: true,
+    },
+    attack: {
       from: 0,
       to: 7,
       loop: true,
