@@ -1,6 +1,6 @@
 import { GameObj } from "kaboom";
 
-type TiledBasicLayer = {
+type TiledBaseLayer = {
   id: number;
   name: string;
   height: number;
@@ -11,15 +11,17 @@ type TiledBasicLayer = {
   opacity: number;
 };
 
-export type TiledTileLayer = TiledBasicLayer & {
+export type TiledTileLayer = TiledBaseLayer & {
   type: "tilelayer";
   data: number[];
 };
 
-export type TiledObjectLayer = TiledBasicLayer & {
-  type: "objectlayer";
+export type TiledObjectLayer = TiledBaseLayer & {
+  type: "objectgroup";
   objects: Array<TiledObject>;
 };
+
+export type TiledLayer = TiledTileLayer | TiledObjectLayer;
 
 export type TiledObject = {
   height: number;

@@ -37,20 +37,22 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
             if (gameObj.isGrounded()) gameObj.jump();
             break;
           case "s":
-            if (gameObj.curAnim() !== "attack")
+            if (gameObj.curAnim() !== "attack") {
               gameObj.play("attack", {
                 onEnd() {
                   gameObj.play("idle");
                 },
               });
+            }
             break;
           default:
         }
       });
 
-      // k.onKeyRelease(() => {
-      //   if (gameObj.curAnim() !== "idle") gameObj.play("idle");
-      // });
+      k.onKeyRelease(() => {
+        if (gameObj.curAnim() !== "idle" && gameObj.curAnim() !== "attack")
+          gameObj.play("idle");
+      });
     },
   };
 }

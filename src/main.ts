@@ -2,7 +2,7 @@ import { GameObj, KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
 import { makeSamurai } from "./entities/samurai";
-import { Entity } from "./types";
+import { TiledLayer, Entity } from "./types";
 
 k.loadSprite(
   "background-layer-1",
@@ -36,7 +36,7 @@ k.loadSprite("samurai", "./assets/entities/samurai.png", {
     attack: {
       from: 0,
       to: 7,
-      loop: true,
+      speed: 16,
     },
   },
 });
@@ -58,8 +58,10 @@ async function arena(k: KaboomCtx) {
     player2: null,
   };
 
-  for (const layer of layers) {
-    if (layer.name === "Boundaries") {
+  let layer: TiledLayer;
+  for (layer of layers) {
+    console.log(layer.type);
+    if (layer.name === "Boundaries" && layer.type === "objectgroup") {
       for (const object of layer.objects) {
         map.add([
           k.area({
@@ -71,7 +73,7 @@ async function arena(k: KaboomCtx) {
       }
     }
 
-    if (layer.name === "SpawnPoints") {
+    if (layer.name === "SpawnPoints" && layer.type === "objectgroup") {
       for (const object of layer.objects) {
         if (object.name === "player-1") {
           entities.player1 = makeSamurai(k, map, k.vec2(object.x, object.y));
@@ -93,10 +95,12 @@ async function arena(k: KaboomCtx) {
       continue;
     }
 
-    drawTiles(k, map, layer, tilewidth, tileheight);
+    if (layer.type === "tilelayer") {
+      drawTiles(k, map, layer, tilewidth, tileheight);
+    }
   }
 
-  k.camPos(k.vec2(k.center().x - 480, k.center().y - 170));
+  k.camPos(k.vec2(k.center().x - 480, k.center().y - 150));
   k.camScale(k.vec2(4));
 
   entities.player1?.setControls();
