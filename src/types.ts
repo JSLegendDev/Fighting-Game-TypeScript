@@ -14,10 +14,12 @@ type TiledBaseLayer = {
 export type TiledTileLayer = TiledBaseLayer & {
   type: "tilelayer";
   data: number[];
+  objects: never;
 };
 
 export type TiledObjectLayer = TiledBaseLayer & {
   type: "objectgroup";
+  data: never;
   objects: Array<TiledObject>;
 };
 
