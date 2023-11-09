@@ -1,4 +1,5 @@
 import { KaboomCtx, Vec2, GameObj } from "kaboom";
+import { setFighterControls } from "./fighter";
 
 export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
   let gameObj = parent.add([
@@ -14,45 +15,12 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
 
   return {
     gameObj,
-    setControls() {
-      k.onKeyDown((key) => {
-        switch (key) {
-          case "a":
-            gameObj.flipX = true;
-            gameObj.move(-gameObj.speed, 0);
-            if (gameObj.curAnim() !== "run") gameObj.play("run");
-            break;
-          case "d":
-            gameObj.flipX = false;
-            gameObj.move(gameObj.speed, 0);
-            if (gameObj.curAnim() !== "run") gameObj.play("run");
-            break;
-          default:
-        }
-      });
-
-      k.onKeyPress((key) => {
-        switch (key) {
-          case "w":
-            if (gameObj.isGrounded()) gameObj.jump();
-            break;
-          case "s":
-            if (gameObj.curAnim() !== "attack") {
-              gameObj.play("attack", {
-                onEnd() {
-                  gameObj.play("idle");
-                },
-              });
-            }
-            break;
-          default:
-        }
-      });
-
-      k.onKeyRelease(() => {
-        if (gameObj.curAnim() !== "idle" && gameObj.curAnim() !== "attack")
-          gameObj.play("idle");
-      });
-    },
+    setControls: () =>
+      setFighterControls(k, gameObj, {
+        LEFT: "a",
+        RIGHT: "d",
+        UP: "w",
+        DOWN: "s",
+      }),
   };
 }

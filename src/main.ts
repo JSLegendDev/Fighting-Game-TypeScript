@@ -1,4 +1,4 @@
-import { GameObj, KaboomCtx } from "kaboom";
+import { KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
 import { makeSamurai } from "./entities/samurai";
@@ -51,6 +51,27 @@ k.loadSprite("ninja", "./assets/entities/ninja.png", {
       to: 35,
       loop: true,
     },
+    run: {
+      from: 48,
+      to: 55,
+      loop: true,
+    },
+    attack: {
+      from: 0,
+      to: 3,
+    },
+  },
+});
+
+k.loadSprite("shop", "./assets/shop_anim.png", {
+  sliceX: 6,
+  sliceY: 1,
+  anims: {
+    default: {
+      from: 0,
+      to: 5,
+      loop: true,
+    },
   },
 });
 
@@ -85,16 +106,37 @@ async function arena(k: KaboomCtx) {
       }
     }
 
+    if (
+      layer.name === "DecorationSpawnPoints" &&
+      layer.type === "objectgroup"
+    ) {
+      for (const object of layer.objects) {
+        switch (object.name) {
+          case "shop":
+            map.add([
+              k.sprite("shop", { anim: "default" }),
+              k.pos(object.x, object.y),
+              k.area(),
+              k.anchor("center"),
+            ]);
+            break;
+          default:
+        }
+      }
+
+      continue;
+    }
+
     if (layer.name === "SpawnPoints" && layer.type === "objectgroup") {
       for (const object of layer.objects) {
-        if (object.name === "player-1") {
-          entities.player1 = makeSamurai(k, map, k.vec2(object.x, object.y));
-          continue;
-        }
-
-        if (object.name === "player-2") {
-          entities.player2 = makeNinja(k, map, k.vec2(object.x, object.y));
-          continue;
+        switch (object.name) {
+          case "player-1":
+            entities.player1 = makeSamurai(k, map, k.vec2(object.x, object.y));
+            break;
+          case "player-2":
+            entities.player2 = makeNinja(k, map, k.vec2(object.x, object.y));
+            break;
+          default:
         }
       }
 
@@ -106,10 +148,11 @@ async function arena(k: KaboomCtx) {
     }
   }
 
-  k.camPos(k.vec2(k.center().x - 480, k.center().y - 160));
+  k.camPos(k.vec2(k.center().x - 450, k.center().y - 160));
   k.camScale(k.vec2(4));
 
   entities.player1?.setControls();
+  entities.player2?.setControls();
 }
 
 k.scene("arena", () => arena(k));

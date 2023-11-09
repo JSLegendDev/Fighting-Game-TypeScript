@@ -78,6 +78,40 @@
                  "width":576,
                  "x":0,
                  "y":240
+                }, 
+                {
+                 "height":176,
+                 "id":11,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":0,
+                 "y":64
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":4,
+         "name":"DecorationSpawnPoints",
+         "objects":[
+                {
+                 "height":0,
+                 "id":9,
+                 "name":"shop",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":240,
+                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -99,7 +133,7 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":48,
+                 "x":80,
                  "y":192
                 }, 
                 {
@@ -113,6 +147,18 @@
                  "width":0,
                  "x":176,
                  "y":208
+                }, 
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":176,
+                 "y":-80
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -120,8 +166,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":6,
+ "nextlayerid":5,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

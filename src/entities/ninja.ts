@@ -1,4 +1,5 @@
 import { KaboomCtx, Vec2, GameObj } from "kaboom";
+import { setFighterControls } from "./fighter";
 
 export function makeNinja(k: KaboomCtx, parent: GameObj, pos: Vec2) {
   let gameObj = parent.add([
@@ -16,6 +17,12 @@ export function makeNinja(k: KaboomCtx, parent: GameObj, pos: Vec2) {
 
   return {
     gameObj,
-    setControls() {},
+    setControls: () =>
+      setFighterControls(k, gameObj, {
+        LEFT: "left",
+        RIGHT: "right",
+        UP: "up",
+        DOWN: "down",
+      }),
   };
 }
