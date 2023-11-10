@@ -41,11 +41,12 @@ export function setFighterControls(
           const fighterPos = fighter.worldPos();
           const hitboxPos: { [key: string]: Vec2 } = {
             LEFT: k.vec2(fighterPos.x - 50, fighterPos.y),
-            RIGHT: k.vec2(fighterPos.x, fighterPos.y),
+            RIGHT: k.vec2(fighterPos.x + 50, fighterPos.y),
           };
 
           const attackHitbox = k.add([
             k.area({ shape: new k.Rect(k.vec2(0), 50, 50) }),
+            k.anchor("center"),
             k.pos(hitboxPos[fighter.direction]),
           ]);
 
