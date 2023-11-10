@@ -1,5 +1,5 @@
 import { KaboomCtx, Vec2, GameObj } from "kaboom";
-import { setFighterControls } from "./fighter";
+import { fighterProps, setFighterControls } from "./fighter";
 
 export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
   let gameObj = parent.add([
@@ -9,7 +9,7 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
     k.anchor("center"),
     k.body(),
     {
-      speed: 200,
+      ...fighterProps,
     },
   ]);
 

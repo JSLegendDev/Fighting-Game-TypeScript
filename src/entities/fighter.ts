@@ -1,4 +1,10 @@
-import { GameObj, KaboomCtx } from "kaboom";
+import { GameObj, KaboomCtx, Vec2 } from "kaboom";
+
+export const fighterProps = {
+  speed: 200,
+  direction: null,
+  animIsPlaying: false,
+};
 
 export function setFighterControls(
   k: KaboomCtx,
@@ -11,11 +17,13 @@ export function setFighterControls(
         fighter.flipX = true;
         fighter.move(-fighter.speed, 0);
         if (fighter.curAnim() !== "run") fighter.play("run");
+        fighter.direction = "LEFT";
         break;
       case keys.RIGHT:
         fighter.flipX = false;
         fighter.move(fighter.speed, 0);
         if (fighter.curAnim() !== "run") fighter.play("run");
+        fighter.direction = "RIGHT";
         break;
       default:
     }
@@ -28,9 +36,21 @@ export function setFighterControls(
         break;
       case keys.DOWN:
         if (fighter.curAnim() !== "attack") {
+          const fighterPos = fighter.worldPos();
+          const hitboxPos: { [key: string]: Vec2 } = {
+            LEFT: k.vec2(fighterPos.x - 50, fighterPos.y),
+            RIGHT: k.vec2(fighterPos.x, fighterPos.y),
+          };
+
+          const attackHitbox = k.add([
+            k.area({ shape: new k.Rect(k.vec2(0), 50, 50) }),
+            k.pos(hitboxPos[fighter.direction]),
+          ]);
+
           fighter.play("attack", {
             onEnd() {
               fighter.play("idle");
+              k.destroy(attackHitbox);
             },
           });
         }
