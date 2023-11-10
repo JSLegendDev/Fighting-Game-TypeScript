@@ -3,7 +3,7 @@ import { GameObj, KaboomCtx, Vec2 } from "kaboom";
 export const fighterProps = {
   speed: 200,
   direction: null,
-  animIsPlaying: false,
+  isSwordAnimPlaying: false,
 };
 
 export function setFighterControls(
@@ -12,6 +12,8 @@ export function setFighterControls(
   keys: { LEFT: string; RIGHT: string; UP: string; DOWN: string }
 ) {
   k.onKeyDown((key) => {
+    if (fighter.isSwordAnimPlaying) return;
+
     switch (key) {
       case keys.LEFT:
         fighter.flipX = true;
@@ -51,8 +53,10 @@ export function setFighterControls(
             onEnd() {
               fighter.play("idle");
               k.destroy(attackHitbox);
+              fighter.isSwordAnimPlaying = false;
             },
           });
+          fighter.isSwordAnimPlaying = true;
         }
         break;
       default:
