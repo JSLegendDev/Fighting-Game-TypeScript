@@ -1,5 +1,6 @@
 import { KaboomCtx, Vec2, GameObj } from "kaboom";
 import { fighterProps, setFighterControls } from "./fighter";
+import { Directions } from "../types";
 
 export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
   let gameObj = parent.add([
@@ -12,6 +13,8 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
       ...fighterProps,
     },
   ]);
+
+  gameObj.direction = Directions.RIGHT;
 
   return {
     gameObj,

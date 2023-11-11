@@ -42,3 +42,8 @@ export type Entity = {
   gameObj: GameObj;
   setControls: Function;
 };
+
+export enum Directions {
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+}

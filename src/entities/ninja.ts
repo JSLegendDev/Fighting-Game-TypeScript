@@ -1,5 +1,6 @@
 import { KaboomCtx, Vec2, GameObj } from "kaboom";
 import { fighterProps, setFighterControls } from "./fighter";
+import { Directions } from "../types";
 
 export function makeNinja(k: KaboomCtx, parent: GameObj, pos: Vec2) {
   let gameObj = parent.add([
@@ -14,6 +15,7 @@ export function makeNinja(k: KaboomCtx, parent: GameObj, pos: Vec2) {
   ]);
 
   gameObj.flipX = true;
+  gameObj.direction = Directions.LEFT;
 
   return {
     gameObj,

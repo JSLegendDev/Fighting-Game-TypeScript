@@ -1,6 +1,10 @@
 import { GameObj, KaboomCtx, Vec2 } from "kaboom";
 
-export const fighterProps = {
+export const fighterProps: {
+  speed: number;
+  direction: null | string;
+  isSwordAnimPlaying: boolean;
+} = {
   speed: 200,
   direction: null,
   isSwordAnimPlaying: false,
@@ -38,17 +42,26 @@ export function setFighterControls(
         break;
       case keys.DOWN:
         if (fighter.curAnim() !== "attack") {
-          const fighterPos = fighter.worldPos();
-          const hitboxPos: { [key: string]: Vec2 } = {
-            LEFT: k.vec2(fighterPos.x - 50, fighterPos.y),
-            RIGHT: k.vec2(fighterPos.x + 50, fighterPos.y),
+          const updateHitboxPos = () => {
+            const fighterPos = fighter.worldPos();
+            const hitboxPos: { [key: string]: Vec2 } = {
+              LEFT: k.vec2(fighterPos.x - 50, fighterPos.y),
+              RIGHT: k.vec2(fighterPos.x + 50, fighterPos.y),
+            };
+            return hitboxPos[fighter.direction];
           };
 
           const attackHitbox = k.add([
             k.area({ shape: new k.Rect(k.vec2(0), 50, 50) }),
             k.anchor("center"),
-            k.pos(hitboxPos[fighter.direction]),
+            k.pos(updateHitboxPos()),
           ]);
+
+          const attackUpdateRef = k.onUpdate(() => {
+            attackHitbox.pos = updateHitboxPos();
+
+            if (!fighter.isSwordAnimPlaying) attackUpdateRef.cancel();
+          });
 
           fighter.play("attack", {
             onEnd() {
