@@ -1,15 +1,18 @@
 import { GameObj, KaboomCtx, Vec2 } from "kaboom";
+import { Directions } from "../types";
 
 export const fighterProps: {
   speed: number;
   direction: null | string;
   isSwordAnimPlaying: boolean;
-  maxHealth: number;
+  maxHp: number;
+  previousHp: number;
 } = {
   speed: 200,
   direction: null,
   isSwordAnimPlaying: false,
-  maxHealth: 10,
+  maxHp: 10,
+  previousHp: 10,
 };
 
 export function setFighterControls(
@@ -25,13 +28,13 @@ export function setFighterControls(
         fighter.flipX = true;
         fighter.move(-fighter.speed, 0);
         if (fighter.curAnim() !== "run") fighter.play("run");
-        fighter.direction = "LEFT";
+        fighter.direction = Directions.LEFT;
         break;
       case keys.RIGHT:
         fighter.flipX = false;
         fighter.move(fighter.speed, 0);
         if (fighter.curAnim() !== "run") fighter.play("run");
-        fighter.direction = "RIGHT";
+        fighter.direction = Directions.RIGHT;
         break;
       default:
     }
@@ -62,9 +65,13 @@ export function setFighterControls(
           const enemyTag = fighter.is("samurai") ? "ninja" : "samurai";
 
           attackHitbox.onCollide(enemyTag, (enemy) => {
+            enemy.previousHp = enemy.hp();
             enemy.hurt(1);
+            if (enemy.curAnim() !== "hit") enemy.play("hit");
+            k.wait(0.1, () => (enemy.previousHp = enemy.hp()));
             if (enemy.hp() === 0) {
-              //TODO: Game over logic.
+              k.debug.log("died");
+              enemy.play("death");
             }
           });
 
@@ -89,7 +96,13 @@ export function setFighterControls(
   });
 
   k.onKeyRelease(() => {
-    if (fighter.curAnim() !== "idle" && fighter.curAnim() !== "attack")
+    if (fighter.hp() <= 0) return;
+
+    if (
+      fighter.curAnim() !== "idle" &&
+      fighter.curAnim() !== "attack" &&
+      fighter.curAnim() !== "hit"
+    )
       fighter.play("idle");
   });
 }

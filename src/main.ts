@@ -2,8 +2,9 @@ import { KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
 import { makeSamurai } from "./entities/samurai";
-import { TiledLayer, Entity } from "./types";
+import { TiledLayer, Entity, Directions } from "./types";
 import { makeNinja } from "./entities/ninja";
+import { makeHealthbar } from "./ui/healthbar";
 
 k.loadSprite(
   "background-layer-1",
@@ -39,6 +40,14 @@ k.loadSprite("samurai", "./assets/entities/samurai.png", {
       to: 5,
       speed: 16,
     },
+    death: {
+      from: 16,
+      to: 21,
+    },
+    hit: {
+      from: 56,
+      to: 59,
+    },
   },
 });
 
@@ -59,6 +68,14 @@ k.loadSprite("ninja", "./assets/entities/ninja.png", {
     attack: {
       from: 0,
       to: 3,
+    },
+    death: {
+      from: 16,
+      to: 22,
+    },
+    hit: {
+      from: 56,
+      to: 58,
     },
   },
 });
@@ -164,6 +181,12 @@ async function arena(k: KaboomCtx) {
 
   entities.player1?.setControls();
   entities.player2?.setControls();
+
+  if (entities.player1)
+    makeHealthbar(k, Directions.LEFT, entities.player1.gameObj);
+
+  if (entities.player2)
+    makeHealthbar(k, Directions.RIGHT, entities.player2.gameObj);
 }
 
 k.scene("arena", () => arena(k));
