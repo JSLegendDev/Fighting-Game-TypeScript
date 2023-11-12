@@ -75,6 +75,9 @@ k.loadSprite("shop", "./assets/shop_anim.png", {
   },
 });
 
+k.loadSprite("fence-1", "./assets/fence_1.png");
+k.loadSprite("fence-2", "./assets/fence_2.png");
+
 async function arena(k: KaboomCtx) {
   k.setGravity(2000);
 
@@ -116,6 +119,14 @@ async function arena(k: KaboomCtx) {
             map.add([
               k.sprite("shop", { anim: "default" }),
               k.pos(object.x, object.y),
+              k.area(),
+              k.anchor("center"),
+            ]);
+            break;
+          case "fence-1":
+            map.add([
+              k.sprite("fence-1"),
+              k.pos(object.x, object.y + 6),
               k.area(),
               k.anchor("center"),
             ]);

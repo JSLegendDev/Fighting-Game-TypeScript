@@ -3,6 +3,53 @@
  "infinite":false,
  "layers":[
         {
+         "draworder":"topdown",
+         "id":4,
+         "name":"DecorationSpawnPoints",
+         "objects":[
+                {
+                 "height":0,
+                 "id":9,
+                 "name":"shop",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":240,
+                 "y":192
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"fence-1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":96,
+                 "y":240
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"fence-1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":336,
+                 "y":240
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -80,7 +127,7 @@
                  "y":240
                 }, 
                 {
-                 "height":176,
+                 "height":112,
                  "id":11,
                  "name":"",
                  "rotation":0,
@@ -88,54 +135,18 @@
                  "visible":true,
                  "width":16,
                  "x":0,
-                 "y":64
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":4,
-         "name":"DecorationSpawnPoints",
-         "objects":[
-                {
-                 "height":0,
-                 "id":9,
-                 "name":"shop",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":240,
-                 "y":192
+                 "y":128
                 }, 
                 {
-                 "height":0,
-                 "id":13,
-                 "name":"fence-1",
-                 "point":true,
+                 "height":112,
+                 "id":16,
+                 "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":0,
-                 "x":304,
-                 "y":224
-                }, 
-                {
-                 "height":0,
-                 "id":14,
-                 "name":"fence-2",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":416,
-                 "y":224
+                 "width":16,
+                 "x":576,
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -191,7 +202,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":16,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
