@@ -4,13 +4,13 @@ import { Directions } from "../types";
 export const fighterProps: {
   speed: number;
   direction: null | string;
-  isSwordAnimPlaying: boolean;
+  isUnskipAnimPlaying: boolean;
   maxHp: number;
   previousHp: number;
 } = {
   speed: 200,
   direction: null,
-  isSwordAnimPlaying: false,
+  isUnskipAnimPlaying: false,
   maxHp: 10,
   previousHp: 10,
 };
@@ -21,7 +21,7 @@ export function setFighterControls(
   keys: { LEFT: string; RIGHT: string; UP: string; DOWN: string }
 ) {
   k.onKeyDown((key) => {
-    if (fighter.isSwordAnimPlaying) return;
+    if (fighter.isUnskipAnimPlaying) return;
 
     switch (key) {
       case keys.LEFT:
@@ -46,7 +46,7 @@ export function setFighterControls(
         if (fighter.isGrounded()) fighter.jump();
         break;
       case keys.DOWN:
-        if (fighter.curAnim() !== "attack") {
+        if (!fighter.isUnskipAnimPlaying) {
           function updateHitboxPos() {
             const fighterPos = fighter.worldPos();
             const hitboxPos: { [key: string]: Vec2 } = {
@@ -65,12 +65,18 @@ export function setFighterControls(
           const enemyTag = fighter.is("samurai") ? "ninja" : "samurai";
 
           attackHitbox.onCollide(enemyTag, (enemy) => {
+            enemy.isUnskipAnimPlaying = true;
+            enemy.play("hit", {
+              onEnd() {
+                enemy.isUnskipAnimPlaying = false;
+              },
+            });
             enemy.previousHp = enemy.hp();
             enemy.hurt(1);
-            if (enemy.curAnim() !== "hit") enemy.play("hit");
+
             k.wait(0.1, () => (enemy.previousHp = enemy.hp()));
             if (enemy.hp() === 0) {
-              k.debug.log("died");
+              enemy.isUnskipAnimPlaying = true;
               enemy.play("death");
             }
           });
@@ -78,31 +84,35 @@ export function setFighterControls(
           const attackUpdateRef = k.onUpdate(() => {
             attackHitbox.pos = updateHitboxPos();
 
-            if (!fighter.isSwordAnimPlaying) attackUpdateRef.cancel();
+            if (!fighter.isUnskipAnimPlaying) attackUpdateRef.cancel();
           });
 
+          fighter.isUnskipAnimPlaying = true;
           fighter.play("attack", {
             onEnd() {
-              fighter.play("idle");
               k.destroy(attackHitbox);
-              fighter.isSwordAnimPlaying = false;
+              fighter.isUnskipAnimPlaying = false;
             },
           });
-          fighter.isSwordAnimPlaying = true;
         }
         break;
       default:
     }
   });
 
+  k.onUpdate(() => {
+    if (
+      fighter.curAnim() !== "idle" &&
+      fighter.curAnim() !== "run" &&
+      !fighter.isUnskipAnimPlaying
+    ) {
+      fighter.play("idle");
+    }
+  });
+
   k.onKeyRelease(() => {
     if (fighter.hp() <= 0) return;
 
-    if (
-      fighter.curAnim() !== "idle" &&
-      fighter.curAnim() !== "attack" &&
-      fighter.curAnim() !== "hit"
-    )
-      fighter.play("idle");
+    if (fighter.curAnim() === "run") fighter.play("idle");
   });
 }
