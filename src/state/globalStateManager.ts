@@ -1,26 +1,26 @@
-import { GameObj } from "kaboom";
+import { Entity } from "../types";
 
 type GlobalState = {
-  getPlayer1: () => GameObj | null;
-  getPlayer2: () => GameObj | null;
-  setPlayer1: (playerRef: GameObj) => void;
-  setPlayer2: (playerRef: GameObj) => void;
+  getPlayer1: () => Entity | null;
+  getPlayer2: () => Entity | null;
+  setPlayer1: (playerRef: Entity) => void;
+  setPlayer2: (playerRef: Entity) => void;
 };
 
 function globalStateManager() {
   let instance: GlobalState | null = null;
 
   function createInstance() {
-    let player1: GameObj | null;
-    let player2: GameObj | null;
+    let player1: Entity | null;
+    let player2: Entity | null;
 
     return {
       getPlayer1: () => player1,
       getPlayer2: () => player2,
-      setPlayer1(playerRef: GameObj) {
+      setPlayer1(playerRef: Entity) {
         player1 = playerRef;
       },
-      setPlayer2(playerRef: GameObj) {
+      setPlayer2(playerRef: Entity) {
         player2 = playerRef;
       },
     };

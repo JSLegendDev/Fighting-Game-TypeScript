@@ -5,6 +5,7 @@ import { makeSamurai } from "./entities/samurai";
 import { TiledLayer, Entity, Directions } from "./types";
 import { makeNinja } from "./entities/ninja";
 import { makeHealthbar } from "./ui/healthbar";
+import globalState from "./state/globalStateManager";
 
 k.loadSprite(
   "background-layer-1",
@@ -107,11 +108,6 @@ async function arena(k: KaboomCtx) {
 
   const map = k.add([k.pos(0, 0)]);
 
-  const entities: { player1: Entity | null; player2: Entity | null } = {
-    player1: null,
-    player2: null,
-  };
-
   let layer: TiledLayer;
   for (layer of layers) {
     if (layer.name === "Boundaries" && layer.type === "objectgroup") {
@@ -159,10 +155,14 @@ async function arena(k: KaboomCtx) {
       for (const object of layer.objects) {
         switch (object.name) {
           case "player-1":
-            entities.player1 = makeSamurai(k, map, k.vec2(object.x, object.y));
+            globalState.setPlayer1(
+              makeSamurai(k, map, k.vec2(object.x, object.y))
+            );
             break;
           case "player-2":
-            entities.player2 = makeNinja(k, map, k.vec2(object.x, object.y));
+            globalState.setPlayer2(
+              makeNinja(k, map, k.vec2(object.x, object.y))
+            );
             break;
           default:
         }
@@ -179,14 +179,14 @@ async function arena(k: KaboomCtx) {
   k.camPos(k.vec2(k.center().x - 450, k.center().y - 160));
   k.camScale(k.vec2(4));
 
-  entities.player1?.setControls();
-  entities.player2?.setControls();
+  globalState.getPlayer1()?.setControls();
+  globalState.getPlayer2()?.setControls();
 
-  if (entities.player1)
-    makeHealthbar(k, Directions.LEFT, entities.player1.gameObj);
+  const player1GameObj = globalState.getPlayer1()?.gameObj;
+  if (player1GameObj) makeHealthbar(k, Directions.LEFT, player1GameObj);
 
-  if (entities.player2)
-    makeHealthbar(k, Directions.RIGHT, entities.player2.gameObj);
+  const player2GameObj = globalState.getPlayer2()?.gameObj;
+  if (player2GameObj) makeHealthbar(k, Directions.RIGHT, player2GameObj);
 }
 
 k.scene("arena", () => arena(k));
