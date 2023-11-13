@@ -49,6 +49,16 @@ k.loadSprite("samurai", "./assets/entities/samurai.png", {
       from: 56,
       to: 59,
     },
+    jump: {
+      from: 40,
+      to: 41,
+      loop: true,
+    },
+    fall: {
+      from: 24,
+      to: 25,
+      loop: true,
+    },
   },
 });
 
@@ -77,6 +87,16 @@ k.loadSprite("ninja", "./assets/entities/ninja.png", {
     hit: {
       from: 56,
       to: 58,
+    },
+    jump: {
+      from: 40,
+      to: 41,
+      loop: true,
+    },
+    fall: {
+      from: 24,
+      to: 25,
+      loop: true,
     },
   },
 });
@@ -179,14 +199,15 @@ async function arena(k: KaboomCtx) {
   k.camPos(k.vec2(k.center().x - 450, k.center().y - 160));
   k.camScale(k.vec2(4));
 
-  globalState.getPlayer1()?.setControls();
-  globalState.getPlayer2()?.setControls();
+  const player1 = globalState.getPlayer1();
+  const player2 = globalState.getPlayer2();
 
-  const player1GameObj = globalState.getPlayer1()?.gameObj;
-  if (player1GameObj) makeHealthbar(k, Directions.LEFT, player1GameObj);
+  player1?.setControls();
+  player2?.setControls();
 
-  const player2GameObj = globalState.getPlayer2()?.gameObj;
-  if (player2GameObj) makeHealthbar(k, Directions.RIGHT, player2GameObj);
+  if (player1?.gameObj) makeHealthbar(k, Directions.LEFT, player1.gameObj);
+
+  if (player2?.gameObj) makeHealthbar(k, Directions.RIGHT, player2.gameObj);
 }
 
 k.scene("arena", () => arena(k));

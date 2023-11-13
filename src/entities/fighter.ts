@@ -27,13 +27,15 @@ export function setFighterControls(
       case keys.LEFT:
         fighter.flipX = true;
         fighter.move(-fighter.speed, 0);
-        if (fighter.curAnim() !== "run") fighter.play("run");
+        if (fighter.curAnim() !== "run" || fighter.curAnim() !== "jump")
+          fighter.play("run");
         fighter.direction = Directions.LEFT;
         break;
       case keys.RIGHT:
         fighter.flipX = false;
         fighter.move(fighter.speed, 0);
-        if (fighter.curAnim() !== "run") fighter.play("run");
+        if (fighter.curAnim() !== "run" || fighter.curAnim() !== "jump")
+          fighter.play("run");
         fighter.direction = Directions.RIGHT;
         break;
       default:
@@ -41,9 +43,12 @@ export function setFighterControls(
   });
 
   k.onKeyPress((key) => {
+    if (fighter.hp() <= 0) return;
+
     switch (key) {
       case keys.UP:
         if (fighter.isGrounded()) fighter.jump();
+        if (fighter.curAnim() !== "jump") fighter.play("jump");
         break;
       case keys.DOWN:
         if (!fighter.isUnskipAnimPlaying) {
@@ -104,6 +109,7 @@ export function setFighterControls(
     if (
       fighter.curAnim() !== "idle" &&
       fighter.curAnim() !== "run" &&
+      fighter.curAnim() !== "jump" &&
       !fighter.isUnskipAnimPlaying
     ) {
       fighter.play("idle");
