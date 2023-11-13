@@ -1,5 +1,5 @@
 import { KaboomCtx, Vec2, GameObj } from "kaboom";
-import { fighterProps, setFighterControls } from "./fighter";
+import { fighterProps, makeFighterBlink, setFighterControls } from "./fighter";
 import { Directions } from "../types";
 
 export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
@@ -10,6 +10,7 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
     k.anchor("center"),
     k.body(),
     k.health(fighterProps.maxHp),
+    k.opacity(),
     "samurai",
     {
       ...fighterProps,
@@ -27,5 +28,6 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
         UP: "w",
         DOWN: "s",
       }),
+    blinkOnHit: () => makeFighterBlink(k, gameObj),
   };
 }
