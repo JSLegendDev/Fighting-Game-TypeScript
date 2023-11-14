@@ -1,5 +1,5 @@
 import { GameObj, KaboomCtx, Vec2 } from "kaboom";
-import { Directions, Entity } from "../types";
+import { Directions } from "../types";
 
 export const fighterProps: {
   speed: number;
