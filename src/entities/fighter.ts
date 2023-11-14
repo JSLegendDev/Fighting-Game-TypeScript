@@ -4,38 +4,34 @@ import { Directions, Entity } from "../types";
 export const fighterProps: {
   speed: number;
   direction: null | string;
-  isUnskipAnimPlaying: boolean;
-  isSkipAnimPlaying: boolean;
+  isDead: boolean;
   maxHp: number;
   previousHp: number;
   previousHeight: number;
 } = {
   speed: 200,
   direction: null,
-  isUnskipAnimPlaying: false,
-  isSkipAnimPlaying: false,
+  isDead: false,
   maxHp: 10,
   previousHp: 10,
   previousHeight: 0,
 };
 
-export function makeFighterBlink(k: KaboomCtx, fighter: GameObj) {
-  fighter.on("hurt", async () => {
-    await k.tween(
-      fighter.opacity,
-      0,
-      0.05,
-      (newOpacity) => (fighter.opacity = newOpacity),
-      k.easings.linear
-    );
-    await k.tween(
-      fighter.opacity,
-      1,
-      0.05,
-      (newOpacity) => (fighter.opacity = newOpacity),
-      k.easings.linear
-    );
-  });
+export async function makeFighterBlink(k: KaboomCtx, fighter: GameObj) {
+  await k.tween(
+    fighter.opacity,
+    0,
+    0.05,
+    (newOpacity) => (fighter.opacity = newOpacity),
+    k.easings.linear
+  );
+  await k.tween(
+    fighter.opacity,
+    1,
+    0.05,
+    (newOpacity) => (fighter.opacity = newOpacity),
+    k.easings.linear
+  );
 }
 
 export function setFighterControls(
@@ -43,16 +39,15 @@ export function setFighterControls(
   fighter: GameObj,
   keys: { LEFT: string; RIGHT: string; UP: string; DOWN: string }
 ) {
-  k.onKeyDown((key) => {
-    if (fighter.isUnskipAnimPlaying) return;
+  const onKeyDownListener = k.onKeyDown((key) => {
+    if (fighter.curAnim() === "attack") return;
 
     if (key === keys.LEFT) {
       fighter.flipX = true;
       fighter.move(-fighter.speed, 0);
       fighter.direction = Directions.LEFT;
-      if (fighter.curAnim() !== "run") {
+      if (fighter.curAnim() !== "run" && fighter.curAnim() !== "jump") {
         fighter.play("run");
-        fighter.isSkipAnimPlaying = true;
       }
       return;
     }
@@ -61,21 +56,23 @@ export function setFighterControls(
       fighter.flipX = false;
       fighter.move(fighter.speed, 0);
       fighter.direction = Directions.RIGHT;
-      if (fighter.curAnim() !== "run") {
+      if (fighter.curAnim() !== "run" && fighter.curAnim() !== "jump") {
         fighter.play("run");
-        fighter.isSkipAnimPlaying = true;
       }
       return;
     }
   });
 
-  k.onKeyRelease((key) => {
-    if (key === keys.LEFT || key === keys.RIGHT) {
-      fighter.isSkipAnimPlaying = false;
+  const onKeyReleaseListener = k.onKeyRelease((key) => {
+    if (
+      (key === keys.LEFT || key === keys.RIGHT) &&
+      fighter.curAnim() !== "idle"
+    ) {
+      fighter.play("idle");
     }
   });
 
-  k.onKeyPress((key) => {
+  const onKeyPressListener = k.onKeyPress((key) => {
     if (
       key === keys.UP &&
       fighter.isGrounded() &&
@@ -83,7 +80,6 @@ export function setFighterControls(
     ) {
       fighter.jump();
       fighter.play("jump");
-      fighter.isUnskipAnimPlaying = true;
     }
 
     if (key === keys.DOWN) {
@@ -117,13 +113,9 @@ export function setFighterControls(
       });
 
       if (fighter.curAnim() !== "attack") {
-        fighter.isUnskipAnimPlaying = true;
-        fighter.play("attack", {
-          onEnd: () => {
-            fighter.isUnskipAnimPlaying = false;
-          },
-        });
+        fighter.play("attack");
       }
+
       k.wait(0.3, () => {
         k.destroy(attackHitbox);
         attackUpdateRef.cancel();
@@ -131,28 +123,47 @@ export function setFighterControls(
     }
   });
 
-  k.onUpdate(() => {
-    // console.log({
-    //   skipAnimPlaying: fighter.isSkipAnimPlaying,
-    //   unSkipAnimPlaying: fighter.isUnskipAnimPlaying,
-    // });
+  fighter.on("hurt", () => {
+    makeFighterBlink(k, fighter);
+    if (fighter.hp() > 0 && fighter.curAnim !== "hit") {
+      fighter.play("hit");
+      return;
+    }
 
+    if (fighter.curAnim !== "death") {
+      fighter.isDead = true;
+      onKeyDownListener.cancel();
+      onKeyReleaseListener.cancel();
+      onKeyPressListener.cancel();
+      fighter.isStatic = true;
+      fighter.area.shape.height = 0;
+      fighter.play("death");
+    }
+  });
+
+  k.onUpdate(() => {
     if (
       !fighter.isJumping() &&
       !fighter.isGrounded() &&
-      fighter.curAnim() !== "fall"
+      fighter.curAnim() !== "fall" &&
+      fighter.curAnim() !== "attack"
     ) {
       fighter.play("fall");
     }
 
     if (fighter.curAnim() === "fall" && fighter.isGrounded()) {
-      fighter.isUnskipAnimPlaying = false;
+      fighter.play("idle");
+      return;
     }
 
     if (
       fighter.curAnim() !== "idle" &&
-      !fighter.isUnskipAnimPlaying &&
-      !fighter.isSkipAnimPlaying
+      fighter.curAnim() !== "jump" &&
+      fighter.curAnim() !== "attack" &&
+      fighter.curAnim() !== "hit" &&
+      fighter.curAnim() !== "fall" &&
+      fighter.curAnim() !== "run" &&
+      !fighter.isDead
     ) {
       fighter.play("idle");
     }

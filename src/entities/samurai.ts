@@ -28,6 +28,5 @@ export function makeSamurai(k: KaboomCtx, parent: GameObj, pos: Vec2) {
         UP: "w",
         DOWN: "s",
       }),
-    blinkOnHit: () => makeFighterBlink(k, gameObj),
   };
 }

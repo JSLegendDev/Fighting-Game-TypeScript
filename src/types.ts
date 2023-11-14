@@ -41,7 +41,6 @@ export type TiledObject = {
 export type Entity = {
   gameObj: GameObj;
   setControls: () => void;
-  blinkOnHit: () => void;
 };
 
 export enum Directions {

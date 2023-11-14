@@ -29,6 +29,5 @@ export function makeNinja(k: KaboomCtx, parent: GameObj, pos: Vec2) {
         UP: "up",
         DOWN: "down",
       }),
-    blinkOnHit: () => makeFighterBlink(k, gameObj),
   };
 }

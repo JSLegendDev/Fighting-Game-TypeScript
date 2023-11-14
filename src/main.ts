@@ -203,10 +203,7 @@ async function arena(k: KaboomCtx) {
   const player2 = globalState.getPlayer2();
 
   player1?.setControls();
-  player1?.blinkOnHit();
-
   player2?.setControls();
-  player2?.blinkOnHit();
 
   if (player1?.gameObj) makeHealthbar(k, Directions.LEFT, player1.gameObj);
 
