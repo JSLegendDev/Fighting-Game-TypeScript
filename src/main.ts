@@ -2,10 +2,9 @@ import { KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
 import { makeSamurai } from "./entities/samurai";
-import { TiledLayer, Directions } from "./types";
+import { TiledLayer, Directions, Entity } from "./types";
 import { makeNinja } from "./entities/ninja";
 import { makeHealthbar } from "./ui/healthbar";
-import globalState from "./state/globalStateManager";
 
 k.loadSprite(
   "background-layer-1",
@@ -126,6 +125,11 @@ async function arena(k: KaboomCtx) {
     "./maps/arena.json"
   );
 
+  const entities: { [key: string]: Entity | null } = {
+    player1: null,
+    player2: null,
+  };
+
   const map = k.add([k.pos(0, 0)]);
 
   let layer: TiledLayer;
@@ -175,14 +179,10 @@ async function arena(k: KaboomCtx) {
       for (const object of layer.objects) {
         switch (object.name) {
           case "player-1":
-            globalState.setPlayer1(
-              makeSamurai(k, map, k.vec2(object.x, object.y))
-            );
+            entities.player1 = makeSamurai(k, map, k.vec2(object.x, object.y));
             break;
           case "player-2":
-            globalState.setPlayer2(
-              makeNinja(k, map, k.vec2(object.x, object.y))
-            );
+            entities.player2 = makeNinja(k, map, k.vec2(object.x, object.y));
             break;
           default:
         }
@@ -199,15 +199,14 @@ async function arena(k: KaboomCtx) {
   k.camPos(k.vec2(k.center().x - 450, k.center().y - 160));
   k.camScale(k.vec2(4));
 
-  const player1 = globalState.getPlayer1();
-  const player2 = globalState.getPlayer2();
+  entities.player1?.setControls();
+  entities.player2?.setControls();
 
-  player1?.setControls();
-  player2?.setControls();
+  if (entities.player1?.gameObj)
+    makeHealthbar(k, Directions.LEFT, entities.player1.gameObj);
 
-  if (player1?.gameObj) makeHealthbar(k, Directions.LEFT, player1.gameObj);
-
-  if (player2?.gameObj) makeHealthbar(k, Directions.RIGHT, player2.gameObj);
+  if (entities.player2?.gameObj)
+    makeHealthbar(k, Directions.RIGHT, entities.player2.gameObj);
 }
 
 k.scene("arena", () => arena(k));
