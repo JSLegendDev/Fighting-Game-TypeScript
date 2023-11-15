@@ -37,9 +37,21 @@ export function makeHealthbar(
     if (owner.hp() === owner.previousHp) return;
 
     owner.previousHp = owner.hp();
+    if (owner.hp() !== 0) {
+      k.tween(
+        healthDisplay.width,
+        healthDisplay.width - reduceWidthBy,
+        0.1,
+        (newWidth) => (healthDisplay.width = newWidth),
+        k.easings.linear
+      );
+
+      return;
+    }
+
     k.tween(
       healthDisplay.width,
-      healthDisplay.width - reduceWidthBy,
+      0,
       0.1,
       (newWidth) => (healthDisplay.width = newWidth),
       k.easings.linear
