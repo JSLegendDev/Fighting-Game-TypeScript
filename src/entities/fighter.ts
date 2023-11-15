@@ -66,7 +66,8 @@ export function setFighterControls(
   const onKeyReleaseListener = k.onKeyRelease((key) => {
     if (
       (key === keys.LEFT || key === keys.RIGHT) &&
-      fighter.curAnim() !== "idle"
+      fighter.curAnim() !== "idle" &&
+      fighter.curAnim() !== "attack"
     ) {
       fighter.play("idle");
     }
@@ -135,8 +136,6 @@ export function setFighterControls(
       onKeyDownListener.cancel();
       onKeyReleaseListener.cancel();
       onKeyPressListener.cancel();
-      fighter.isStatic = true;
-      fighter.area.shape.height = 0;
       fighter.play("death");
     }
   });
