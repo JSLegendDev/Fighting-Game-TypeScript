@@ -85,10 +85,9 @@ export function setFighterControls(
 
     if (key === keys.DOWN) {
       function updateHitboxPos() {
-        const fighterPos = fighter.worldPos();
         const hitboxPos: { [key: string]: Vec2 } = {
-          LEFT: k.vec2(fighterPos.x - 50, fighterPos.y),
-          RIGHT: k.vec2(fighterPos.x + 50, fighterPos.y),
+          LEFT: k.vec2(fighter.pos.x - 50, fighter.pos.y),
+          RIGHT: k.vec2(fighter.pos.x + 50, fighter.pos.y),
         };
         return hitboxPos[fighter.direction];
       }
@@ -137,6 +136,41 @@ export function setFighterControls(
       onKeyReleaseListener.cancel();
       onKeyPressListener.cancel();
       fighter.play("death");
+
+      const enemyTag = fighter.is("samurai") ? "ninja" : "samurai";
+      const enemy = k.get(enemyTag, { recursive: true })[0];
+
+      const enemyStatus = k.add([
+        k.text("WINNER", {
+          size: 16,
+        }),
+        k.area(),
+        k.anchor("center"),
+        k.pos(),
+      ]);
+
+      const fighterStatus = k.add([
+        k.text("LOSER", {
+          size: 16,
+        }),
+        k.area(),
+        k.anchor("center"),
+        k.pos(),
+      ]);
+
+      k.onUpdate(() => {
+        enemyStatus.pos = k.vec2(enemy.pos.x, enemy.pos.y - 40);
+        // so that text align with dead ninja body more closely
+        if (fighter.is("ninja") && fighter.isDead) {
+          fighterStatus.pos = k.vec2(fighter.pos.x - 25, fighter.pos.y - 5);
+          return;
+        }
+        fighterStatus.pos = k.vec2(fighter.pos.x, fighter.pos.y - 40);
+      });
+
+      k.wait(5, () => {
+        k.go("arena");
+      });
     }
   });
 
