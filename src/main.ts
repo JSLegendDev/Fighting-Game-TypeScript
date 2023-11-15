@@ -2,7 +2,7 @@ import { KaboomCtx } from "kaboom";
 import k from "./kaboomCtx";
 import { drawTiles, fetchMapData } from "./utils";
 import { makeSamurai } from "./entities/samurai";
-import { TiledLayer, Entity, Directions } from "./types";
+import { TiledLayer, Directions } from "./types";
 import { makeNinja } from "./entities/ninja";
 import { makeHealthbar } from "./ui/healthbar";
 import globalState from "./state/globalStateManager";

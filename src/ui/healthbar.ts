@@ -23,6 +23,7 @@ export function makeHealthbar(
 
   const healthDisplay = healthContainer.add([
     k.rect(600, 46),
+    k.color(0, 200, 0),
     k.pos(-300, -23),
     k.rotate(0),
   ]);
