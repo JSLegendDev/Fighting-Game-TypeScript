@@ -113,7 +113,6 @@ k.loadSprite("shop", "./assets/shop_anim.png", {
 });
 
 k.loadSprite("fence-1", "./assets/fence_1.png");
-k.loadSprite("fence-2", "./assets/fence_2.png");
 
 async function arena(k: KaboomCtx) {
   k.setGravity(2000);

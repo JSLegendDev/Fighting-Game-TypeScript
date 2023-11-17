@@ -34,7 +34,7 @@ export function makeHealthbar(
   }
 
   const reduceWidthBy = healthDisplay.width / owner.maxHp;
-  k.onUpdate(async () => {
+  k.onUpdate(() => {
     if (owner.hp() === owner.previousHp) return;
 
     owner.previousHp = owner.hp();
